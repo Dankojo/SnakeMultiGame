@@ -1,0 +1,22 @@
+{
+  "name": "snakemultigame",
+  "version": "0.0.1",
+  "description": "Snake multiplayer game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dankojo/SnakeMultiGame.git"
+  },
+  "keywords": [
+    "Snake"
+  ],
+  "author": "Bent Rynning",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dankojo/SnakeMultiGame/issues"
+  },
+  "homepage": "https://github.com/Dankojo/SnakeMultiGame#readme"
+}
