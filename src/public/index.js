@@ -1,21 +1,24 @@
-var canvas = document.getElementById('gameCanvas');
-var ctx = canvas.getContext('2d');
-var frames = 15;
-var gs = ts = 20;
-var xv = yv = 0;
-var fx = fy = 15;
-var sy = sx = 10;
-var tail = 5;
-var trail = []
-var paintTail = false;
+import io from 'socket.io-client';
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const frames = 15;
+const socket = io('http://localhost:3000');
+
+let gs = 20, ts = 20;
+let xv = 0, yv = 0;
+let fx = 15, fy = 15;
+let sy = 10, sx = 10;
+let tail = 5;
+let trail = []
+let paintTail = false;
+
+let ptTail = 5;
+let ptTrail = [];
+let ptSx,ptSy = 20;
 document.addEventListener('keydown', keyPush);
 
-const testArray = [1,2,3,4];
-const newArray = [...testArray, ...[5,6,7]];
-
-console.log(newArray);
-
-var game = () => {
+const game = () => {
     sx += xv;
     sy += yv;
     if (sx < 0) {
@@ -33,10 +36,7 @@ var game = () => {
     ctx.fillStyle = 'rgb(44,62,80)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     paintSnake();
-    trail.push({ x: sx, y: sy });
-    while (trail.length > tail) {
-        trail.shift();
-    }
+    paintPlayerTwoSnake();
     addFood();
 }
 function addFood() {
@@ -44,6 +44,10 @@ function addFood() {
         tail++;
         fx = Math.floor(Math.random() * ts);
         fy = Math.floor(Math.random() * ts);
+        socket.emit('add food', {
+            fx: fx,
+            fy: fy,
+        });
     }
     ctx.fillStyle = 'rgb(231,76,60)';
     ctx.fillRect(fx * gs, fy * gs, gs - 2, gs - 2)
@@ -63,7 +67,37 @@ function paintSnake() {
             }
         }
     }
+    trail.push({ x: sx, y: sy });
+    socket.emit('snake moved', {
+        trail: trail,
+        head: {sx:sx, sy:sy},
+    });
+    while (trail.length > tail) {
+        trail.shift();
+    }   
 }
+
+function paintPlayerTwoSnake() {
+    ctx.fillStyle = 'rgb(41,128,255)';
+    ctx.fillRect(ptSx * gs, ptSy * gs, gs - 2, gs - 2);
+
+    for (t of ptTrail) {
+        ctx.fillStyle = 'rgb(255,204,113)';
+        ctx.fillRect(t.x * gs, t.y * gs, gs - 2, gs - 2);
+    }
+}
+
+function updatePlayerTwoSnake(data) {
+    ptSx = data.sx;
+    ptSy = data.sy;
+    ptTrail = data.trail;
+}
+
+function updateFood(data) {
+    fx = data.fx;
+    fy = data.fy;
+}
+
 function keyPush(evt) {
     switch (evt.keyCode) {
         case 37:
@@ -82,3 +116,11 @@ function keyPush(evt) {
     paintTail = true;
 }
 setInterval(game, 1000 / frames);
+
+socket.on('snake move', function (data) {
+    updatePlayerTwoSnake(data);
+});
+
+socket.on('new food', function (data) {
+    updateFood(data);
+});
