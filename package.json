@@ -4,7 +4,9 @@
   "description": "Snake multiplayer game",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel ./src/public/index.html",
+    "build": "NODE_ENV=production parcel ./src/public/index.html"
   },
   "repository": {
     "type": "git",
@@ -18,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/Dankojo/SnakeMultiGame/issues"
   },
-  "homepage": "https://github.com/Dankojo/SnakeMultiGame#readme"
+  "homepage": "https://github.com/Dankojo/SnakeMultiGame#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "parcel-bundler": "^1.1.0",
+    "socket.io": "^2.0.4"
+  }
 }
