@@ -5,7 +5,11 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, '../../dist')));
+app.use('/dist', express.static(path.join(__dirname, '../../dist')));
+
+app.get('/h', (req, res) => {
+    res.send('hello world');
+});
 
 http.listen(port, () => {
     console.log('Server started');

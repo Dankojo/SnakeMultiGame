@@ -1,4 +1,5 @@
 import io from 'socket.io-client';
+import './style.css';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -58,7 +59,7 @@ function paintSnake() {
     ctx.fillRect(sx * gs, sy * gs, gs - 2, gs - 2);
 
     if (paintTail) {
-        for (t of trail) {
+        for (const t of trail) {
             ctx.fillStyle = 'rgb(46,204,113)';
             ctx.fillRect(t.x * gs, t.y * gs, gs - 2, gs - 2);
             if (t.x == sx && t.y == sy) {
@@ -81,7 +82,7 @@ function paintPlayerTwoSnake() {
     ctx.fillStyle = 'rgb(41,128,255)';
     ctx.fillRect(ptSx * gs, ptSy * gs, gs - 2, gs - 2);
 
-    for (t of ptTrail) {
+    for (const t of ptTrail) {
         ctx.fillStyle = 'rgb(255,204,113)';
         ctx.fillRect(t.x * gs, t.y * gs, gs - 2, gs - 2);
     }
